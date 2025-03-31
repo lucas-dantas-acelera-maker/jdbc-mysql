@@ -9,6 +9,7 @@ import java.util.Properties;
 
 public class Database {
     private static Connection conn = null;
+    private static Statement st = null;
 
     public static Connection getConnection() {
         if (conn == null) {
@@ -36,6 +37,27 @@ public class Database {
         } catch (SQLException e) {
             throw new DatabaseException(e.getMessage());
 
+        }
+    }
+
+    public static void createStatement(String query) {
+        try {
+            if (conn != null) {
+                Statement st = conn.createStatement();
+                st.execute(query);
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+    }
+
+    public static void closeStatement() {
+        try {
+            if (st != null) {
+                st.close();
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
         }
     }
 
