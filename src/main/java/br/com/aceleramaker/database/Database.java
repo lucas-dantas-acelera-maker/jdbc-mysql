@@ -9,7 +9,8 @@ import java.util.Properties;
 
 public class Database {
     private static Connection conn = null;
-    private static Statement st = null;
+    private static final Statement st = null;
+    private static final ResultSet rs = null;
 
     public static Connection getConnection() {
         if (conn == null) {
@@ -54,6 +55,16 @@ public class Database {
     public static void closeStatement() {
         try {
             if (st != null) {
+                st.close();
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+    }
+
+    public static void closeResultSet() {
+        try {
+            if (rs != null) {
                 st.close();
             }
         } catch (SQLException e) {

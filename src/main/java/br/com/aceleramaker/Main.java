@@ -14,15 +14,15 @@ public class Main {
 
         try (sc) {
             Queries queries = new Queries(sc);
-            String st;
             conn = Database.getConnection();
 
-            queries.addNewPerson(conn);
+            queries.getPeople(conn);
         } catch (DatabaseException e) {
             System.out.println(e.getMessage());
         } finally {
-            Database.closeConnection();
             Database.closeStatement();
+            Database.closeResultSet();
+            Database.closeConnection();
         }
     }
 }
