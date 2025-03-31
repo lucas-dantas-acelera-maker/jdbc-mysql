@@ -17,9 +17,7 @@ public class Main {
             String st;
             conn = Database.getConnection();
 
-            st = queries.addNewPerson();
-
-            Database.createStatement(st);
+            queries.addNewPerson(conn);
         } catch (DatabaseException e) {
             System.out.println(e.getMessage());
         } finally {
