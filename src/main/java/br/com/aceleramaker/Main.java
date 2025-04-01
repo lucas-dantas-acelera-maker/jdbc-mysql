@@ -16,7 +16,7 @@ public class Main {
             Queries queries = new Queries(sc);
             conn = Database.getConnection();
 
-            queries.getPeople(conn);
+            queries.getPersonByName(conn);
         } catch (DatabaseException e) {
             System.out.println(e.getMessage());
         } finally {
