@@ -5,14 +5,17 @@ import br.com.aceleramaker.model.Person;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class Queries {
     private final Scanner sc;
+    Connection conn;
 
-    public Queries(Scanner sc) {
+    public Queries(Scanner sc, Connection conn) {
         this.sc = sc;
+        this.conn = conn;
     }
 
     public String createTable() {
@@ -24,7 +27,7 @@ public class Queries {
                 """;
     }
 
-    public void addNewPerson(Connection conn) {
+    public void addNewPerson() {
         try {
             System.out.print("Name: ");
             String name = sc.nextLine();
@@ -44,7 +47,7 @@ public class Queries {
         }
     }
 
-    public void getPeople(Connection conn) {
+    public void getPeople() {
         try {
             String sql = "SELECT * FROM people";
 
@@ -66,7 +69,7 @@ public class Queries {
         }
     }
 
-    public void getPersonByName(Connection conn) {
+    public void getPersonByName() {
         try {
             System.out.print("Word to search for: ");
             String userIn = sc.nextLine();
@@ -90,5 +93,39 @@ public class Queries {
         } catch (SQLException e) {
             throw new DatabaseException(e.getMessage());
         }
+    }
+
+    public void updatePersonById() {
+        try {
+            System.out.println("---------UPDATE NAME BY ID---------");
+            System.out.println("List of people: ");
+            getPeople();
+
+            System.out.print("Select person ID to be updated: ");
+            int inId = sc.nextInt();
+            sc.nextLine();
+
+            System.out.print("New name: ");
+            String inName = sc.nextLine();
+
+            String sql =
+                    """
+                    UPDATE people
+                    SET name = ?
+                    WHERE id = ?
+                    """;
+            PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            st.setString(1, inName);
+            st.setInt(2, inId);
+
+            int rowsAffected = st.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Updated List: ");
+                getPeople();
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+
     }
 }

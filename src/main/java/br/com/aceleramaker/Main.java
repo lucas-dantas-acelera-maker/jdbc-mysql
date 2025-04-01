@@ -13,10 +13,10 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         try (sc) {
-            Queries queries = new Queries(sc);
             conn = Database.getConnection();
+            Queries queries = new Queries(sc, conn);
 
-            queries.getPersonByName(conn);
+            queries.updatePersonById();
         } catch (DatabaseException e) {
             System.out.println(e.getMessage());
         } finally {
